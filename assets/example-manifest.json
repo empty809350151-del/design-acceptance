@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "title": "Design Acceptance",
+    "date": "2026-09-01",
+    "designer": "三屿",
+    "frontend": "像阳"
+  },
+  "pages": [
+    {
+      "id": "example-page",
+      "title": "示例验收页面",
+      "lead": "这是 Skill 自带的交互报告预览。实际执行时替换为 Figma 截图、设计稿、热区和遮罩。",
+      "source": "Example manifest",
+      "scope_note": "红框为实际问题，绿色虚线为设计目标；点击字段或问题卡可定位。",
+      "metrics": {"overall": 82.4, "pixel": 88.7, "structural": 67.7, "critical": 1},
+      "images": {"actual": "", "design": "", "heatmap": "", "mask": ""},
+      "align_offset_percent": -4.0,
+      "fields": [
+        {"name": "页面标题", "expected": 42, "estimate": 38.9, "delta": -3.1, "flag": true, "actual_anchor": [40, 180], "design_anchor": [42, 140], "crop": [520, 96], "actual_ink_height": 37, "design_ink_height": 40, "issue": 2},
+        {"name": "主按钮", "expected": 30, "estimate": 30.6, "delta": 0.6, "flag": false, "actual_anchor": [280, 1450], "design_anchor": [284, 1490], "crop": [220, 90], "actual_ink_height": 28, "design_ink_height": 27, "issue": 3}
+      ],
+      "issues": [
+        {"id": 1, "severity": "P0", "title": "浮层位置与高度", "design": "设计稿：浮层顶部 y=234px，高度1390px。", "actual_rect": [0, 326, 750, 1298, 24], "expected_rect": [0, 234, 750, 1390, 24]},
+        {"id": 2, "severity": "P1", "title": "页面标题字号", "design": "设计稿：标题字号42px。", "actual_rect": [24, 350, 702, 80, 8], "expected_rect": [24, 258, 702, 88, 8]},
+        {"id": 3, "severity": "P1", "title": "主按钮位置", "design": "设计稿：按钮 x=24px、y=1468px、702×84px。", "actual_rect": [24, 1424, 702, 84, 42], "expected_rect": [24, 1468, 702, 84, 42]}
+      ]
+    }
+  ]
+}

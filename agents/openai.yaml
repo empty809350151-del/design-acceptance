@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Overlay Acceptance"
+  short_description: "Anchored Figma overlay QA with interactive HTML reports"
+  default_prompt: "Use $figma-overlay-acceptance to compare a Figma design and implementation screenshot, then generate an interactive multi-page HTML acceptance report."
