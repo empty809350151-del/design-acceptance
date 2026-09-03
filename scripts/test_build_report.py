@@ -54,6 +54,14 @@ class BuildReportTest(unittest.TestCase):
         ids = re.findall(r'\sid="([^"]+)"', self.output)
         self.assertEqual(len(ids), len(set(ids)))
 
+    def test_short_viewport_keeps_its_real_aspect_ratio(self) -> None:
+        manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        manifest["pages"][0]["viewport"] = [750, 469]
+        output = self.builder.build(manifest)
+        self.assertIn('class="overlay-wrap partial"', output)
+        self.assertIn('style="aspect-ratio:750/469"', output)
+        self.assertIn('viewBox="0 0 750 469"', output)
+
 
 if __name__ == "__main__":
     unittest.main()

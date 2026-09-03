@@ -12,6 +12,7 @@ Use UTF-8 JSON. Start from `assets/example-manifest.json`.
 - `id`: stable lowercase slug.
 - `title`, `lead`, `source`.
 - `metrics`: `overall`, `pixel`, `structural`, `critical`; numbers, not formatted strings.
+- `viewport`: optional `[width,height]` comparison coordinate space; defaults to `[750,1624]`. Use the exact common crop so short components are not stretched to a phone-screen aspect ratio.
 - `images`: paths for `actual`, `design`, optional `heatmap`, optional `mask`.
 - `align_offset_percent`: optional percentage for moving the actual screenshot during anchor alignment.
 - `scope_note`: short, user-readable exclusion note.
