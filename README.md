@@ -1,5 +1,7 @@
 # Design Acceptance
 
+![Design Acceptance — Figma Overlay Acceptance](assets/design-acceptance-banner.png)
+
 Design Acceptance 是一个用于 APP/H5 设计还原验收的 Skill，根据测试用例截图与 Figma 设计稿生成可交互的验收报告。
 
 GitHub 仓库名为 `design-acceptance`，Skill 调用标识仍为 `figma-overlay-acceptance`。
@@ -10,7 +12,7 @@ GitHub 仓库名为 `design-acceptance`，Skill 调用标识仍为 `figma-overla
 
 ## 安装
 
-将仓库克隆到 Codex 的 Skill 目录（需要当前私有仓库的访问权限）：
+将公开仓库克隆到 Codex 的 Skill 目录：
 
 ```bash
 git clone https://github.com/empty809350151-del/design-acceptance.git ~/.codex/skills/figma-overlay-acceptance
