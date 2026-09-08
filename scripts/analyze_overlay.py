@@ -11,12 +11,25 @@ import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 
-def load_image(path: Path, viewport: tuple[int, int]) -> Image.Image:
+def load_image(path: Path, viewport: tuple[int, int], transform: dict | None = None) -> Image.Image:
     image = Image.open(path).convert("RGBA")
+    transform = transform or {}
+    # Crop browser/system chrome in source pixels, then apply ONE uniform scale.
+    source_rect = transform.get("source_rect", [0, 0, image.width, image.height])
+    x0, y0, x1, y1 = source_rect
+    if not (0 <= x0 < x1 <= image.width and 0 <= y0 < y1 <= image.height):
+        raise ValueError(f"{path}: source_rect is outside the original image")
+    image = image.crop(tuple(source_rect))
+    scale = float(transform.get("scale", 1))
+    if not np.isfinite(scale) or scale <= 0:
+        raise ValueError("scale must be finite and positive")
+    if scale != 1:
+        image = image.resize((max(1, round(image.width * scale)), max(1, round(image.height * scale))), Image.Resampling.LANCZOS)
     width, height = viewport
-    if image.width < width or image.height < height:
-        raise ValueError(f"{path} is {image.size}, smaller than viewport {viewport}")
-    return image.crop((0, 0, width, height))
+    left, top = transform.get("origin", [0, 0])
+    if left < 0 or top < 0 or left + width > image.width or top + height > image.height:
+        raise ValueError(f"{path}: comparison crop exceeds normalized image {image.size}")
+    return image.crop((left, top, left + width, top + height))
 
 
 def line_bands(mask: np.ndarray) -> list[tuple[int, int]]:
@@ -65,7 +78,7 @@ def yiq_delta(actual: np.ndarray, design: np.ndarray) -> np.ndarray:
 def structural_fidelity(actual: Image.Image, design: Image.Image, mask: Image.Image) -> tuple[float, dict]:
     scores = {}
     for scale in (2, 4, 8, 16):
-        size = (actual.width // scale, actual.height // scale)
+        size = (max(1, actual.width // scale), max(1, actual.height // scale))
         a = actual.convert("L").resize(size, Image.Resampling.BOX).filter(ImageFilter.FIND_EDGES)
         d = design.convert("L").resize(size, Image.Resampling.BOX).filter(ImageFilter.FIND_EDGES)
         include = ImageChops.invert(mask.resize(size, Image.Resampling.NEAREST))
@@ -85,16 +98,26 @@ def structural_fidelity(actual: Image.Image, design: Image.Image, mask: Image.Im
 
 def analyze(config: dict) -> dict:
     viewport = tuple(config.get("viewport", [750, 1624]))
-    actual = load_image(Path(config["actual"]), viewport)
-    design = load_image(Path(config["design"]), viewport)
+    if len(viewport) != 2 or any(not isinstance(v, int) or v <= 0 for v in viewport):
+        raise ValueError("viewport must contain two positive integers")
+    actual = load_image(Path(config["actual"]), viewport, config.get("actual_transform"))
+    design = load_image(Path(config["design"]), viewport, config.get("design_transform"))
     output_dir = Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
     slug = config["slug"]
 
-    mask = Image.new("L", viewport, 0)
+    mask = Image.new("L", viewport, 255 if config.get("include_rects") else 0)
     draw = ImageDraw.Draw(mask)
+    for rect in config.get("include_rects", []):
+        x0, y0, x1, y1 = rect
+        draw.rectangle((x0, y0, x1 - 1, y1 - 1), fill=0)
     for rect in config.get("exclude_rects", []):
-        draw.rectangle(tuple(rect), fill=255)
+        x0, y0, x1, y1 = rect
+        draw.rectangle((x0, y0, x1 - 1, y1 - 1), fill=255)
+    if not np.any(np.asarray(mask) == 0):
+        raise ValueError("No eligible pixels remain; this scope cannot be scored")
+    actual.save(output_dir / f"{slug}-actual.png")
+    design.save(output_dir / f"{slug}-design.png")
     mask_visual = Image.new("RGBA", viewport, (54, 211, 255, 0))
     mask_visual.putalpha(mask.point(lambda value: 68 if value else 0))
     mask_visual.save(output_dir / f"{slug}-mask.png")
@@ -119,7 +142,7 @@ def analyze(config: dict) -> dict:
         estimates = []
         if design_measure["ink_height"]:
             estimates.append(expected * actual_measure["ink_height"] / design_measure["ink_height"])
-        if field.get("same_text", True) and design_measure["ink_width"]:
+        if field.get("same_text", True) and field.get("same_wrap", True) and design_measure["ink_width"]:
             estimates.append(expected * actual_measure["ink_width"] / design_measure["ink_width"])
         estimate = round(max(estimates, key=lambda value: abs(value - expected)), 1) if estimates else None
         delta = round(estimate - expected, 1) if estimate is not None else None
@@ -133,6 +156,10 @@ def analyze(config: dict) -> dict:
         })
 
     result = {
+        "viewport": list(viewport),
+        "normalization": {"actual": config.get("actual_transform", {}), "design": config.get("design_transform", {})},
+        "scope": {"include_rects": config.get("include_rects", []), "exclude_rects": config.get("exclude_rects", [])},
+        "images": {kind: f"{slug}-{kind}.png" for kind in ("actual", "design", "heatmap", "mask")},
         "engine": "YIQ numpy threshold + multi-scale edge F1",
         "threshold": float(config.get("threshold", 0.02)),
         "pixel_fidelity": pixel,

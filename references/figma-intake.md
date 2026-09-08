@@ -1,5 +1,7 @@
 # Figma intake and pairing
 
+The default source of implementation screenshots is the test-case document, not Figma. Follow [test-case-intake.md](test-case-intake.md) for document provenance, separate APP/H5 coverage, scoped review and semantic pairing. The canvas workflow below applies only when screenshots actually reside in Figma. Retain the test document location instead of inventing an implementation node ID.
+
 ## Broad canvas links
 
 A canvas URL may resolve to many screenshot/design pairs. Use metadata to enumerate candidates and look for:
