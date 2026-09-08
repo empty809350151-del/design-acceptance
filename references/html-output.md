@@ -59,7 +59,7 @@ python3 scripts/test_analyze_overlay.py
 
 四类问题均需图上标注：字号叠图显示截图估算／设计字号；颜色显示实际采样／设计色值及色块；间距显示已测量方向、标线和实际／设计数值；尺寸显示宽高。颜色与间距读取 `annotation` 测量数据，缺失则显示待测，不将元素外框尺寸误作间距。
 
-标题文案固定规则：左栏品牌标题始终为 `Design Acceptance`，副标题保留 `Figma Overlay Acceptance`；左栏需求标题与页面顶部眉题统一读取 `meta.project`（本次需求名称），不能使用通过／未通过状态替代；右侧验收问题英文副标题固定为 `Acceptance Issue`。
+标题文案固定规则：左栏品牌标题始终为 `Design Acceptance`，副标题保留 `Figma Design Review`；左栏需求标题与页面顶部眉题统一读取 `meta.project`（本次需求名称），不能使用通过／未通过状态替代；右侧验收问题英文副标题固定为 `Acceptance Issue`。
 
 所有 details 展开／收起箭头使用用户提供的 `assets/disclosure-arrow.svg`（原始 viewBox 24×24，显示尺寸 16×16px，填充 `#0F131A`），生成时以内嵌 data URI 输出，保留 220ms 旋转过渡及减少动态效果支持；不得用文本字符或浏览器原生三角替代。
 

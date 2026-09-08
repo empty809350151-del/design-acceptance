@@ -422,11 +422,11 @@ def build(manifest: dict, asset_dir: Path | None = None) -> str:
         owners.setdefault("Flutter" if platform == "APP" else platform, page.get("frontend", manifest["meta"].get("frontend", "—")))
     owner_html = "".join(f'<div><span>{esc(role)}</span><strong title="{esc(owner)}">{esc(owner)}</strong></div>' for role, owner in owners.items())
     bodies = "".join(page_html(page, index != 0) for index, page in enumerate(pages))
-    titles = {p["id"]: f'{p["title"]} | Overlay Design Review and Acceptance' for p in pages}
+    titles = {p["id"]: f'{p["title"]} | Design Acceptance' for p in pages}
     script = SCRIPT.replace("__PAGE_TITLES__", json.dumps(titles, ensure_ascii=False)).replace("__FIRST_PAGE__", json.dumps(pages[0]["id"]))
     meta = manifest["meta"]
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(titles[pages[0]['id']])}</title><style>{STYLE}</style></head><body>
-    <aside class="sidebar"><button class="sidebar-toggle" aria-expanded="true" aria-label="收起侧边栏">‹</button><div class="sidebar-content"><h2 class="sidebar-title">Design Acceptance</h2><p class="sidebar-subtitle">Figma Overlay Acceptance</p><h3 class="sidebar-project">{esc(meta.get("project", "设计还原验收"))}</h3><div class="sidebar-meta">{owner_html}</div><nav class="sidebar-nav">{nav}</nav></div></aside>
+    <aside class="sidebar"><button class="sidebar-toggle" aria-expanded="true" aria-label="收起侧边栏">‹</button><div class="sidebar-content"><h2 class="sidebar-title">Design Acceptance</h2><p class="sidebar-subtitle">Figma Design Review</p><h3 class="sidebar-project">{esc(meta.get("project", "设计还原验收"))}</h3><div class="sidebar-meta">{owner_html}</div><nav class="sidebar-nav">{nav}</nav></div></aside>
     <div class="page-shell">{bodies}</div><script>{script}</script></body></html>'''
 
 

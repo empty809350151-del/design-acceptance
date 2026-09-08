@@ -1,10 +1,10 @@
 # Design Acceptance
 
-![Design Acceptance — Figma Overlay Acceptance](assets/design-acceptance-banner.png)
+![Design Acceptance — Figma Design Review](assets/design-acceptance-banner.png)
 
 Design Acceptance 是一个用于 APP/H5 设计还原验收的 Skill，根据测试用例截图与 Figma 设计稿生成可交互的验收报告。
 
-GitHub 仓库名为 `design-acceptance`，Skill 调用标识仍为 `figma-overlay-acceptance`。
+GitHub 仓库名和 Skill 标识统一为 `design-acceptance`，在对话中使用 `$design-acceptance` 调用。
 
 工作入口是测试用例文档、Figma 设计稿与本次开发范围。APP/H5 按负责人、用例状态和模块分别验收；截图先等比归一化，再依次按 **字号、颜色、间距、元素尺寸** 四个方面验收，像素与结构分数辅助定位。每个方面记录通过、未通过、待确认或不适用及依据；证据不足不能算通过。合法文案换行单独按布局规则验收。HTML 默认左右对比，可切换叠图，问题框仅在选中时显示。
 
@@ -15,13 +15,13 @@ GitHub 仓库名为 `design-acceptance`，Skill 调用标识仍为 `figma-overla
 将公开仓库克隆到 Codex 的 Skill 目录：
 
 ```bash
-git clone https://github.com/empty809350151-del/design-acceptance.git ~/.codex/skills/figma-overlay-acceptance
+git clone https://github.com/empty809350151-del/design-acceptance.git ~/.codex/skills/design-acceptance
 ```
 
 如果已经安装，在没有未提交改动时更新：
 
 ```bash
-git -C ~/.codex/skills/figma-overlay-acceptance pull --ff-only
+git -C ~/.codex/skills/design-acceptance pull --ff-only
 ```
 
 执行验收的 agent 需要能够读取测试用例文档及其原始图片，并访问对应 Figma 文件。请先在所用工具中完成相关授权。
@@ -40,7 +40,7 @@ git -C ~/.codex/skills/figma-overlay-acceptance pull --ff-only
 在对话中输入以下内容，并替换其中的占位信息：
 
 ```text
-使用 $figma-overlay-acceptance 进行设计验收。
+使用 $design-acceptance 进行设计验收。
 
 需求名称：预订模块优化
 测试用例：<文档链接或本地文件路径>
