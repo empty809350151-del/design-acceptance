@@ -3,7 +3,7 @@ name: figma-overlay-acceptance
 description: Review APP and H5 screenshots from test-case documents against matching Figma designs within the development scope. Normalize capture scale, distinguish valid content reflow, and generate side-by-side and overlay HTML acceptance reports. Use for visual design acceptance and screenshot-versus-Figma QA; not for implementing the product UI itself.
 ---
 
-# Figma Overlay Acceptance
+# Design Acceptance
 
 Produce an evidence-backed visual acceptance result and a reusable HTML preview. Review every scoped unit in this order: **字号 (font size), 颜色 (color), 间距 (spacing), 元素尺寸 (element size)**. Pixel and structural scores are supporting diagnostics, not substitutes for these four checks. Preserve existing pages when appending another review.
 

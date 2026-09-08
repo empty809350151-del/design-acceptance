@@ -1,4 +1,4 @@
-# Figma Overlay Acceptance
+# Design Acceptance
 
 这是 `figma-overlay-acceptance` Skill 的独立维护项目，也是 Codex 当前直接加载的安装目录。
 
